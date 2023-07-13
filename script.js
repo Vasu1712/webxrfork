@@ -74,15 +74,6 @@ function fetchMatchData() {
 		console.error('Error fetching general data:', error);
 	  });
   }
-
-  const scoreMeshData = [
-	{ x: -45, y: 90, z: 15, scaleX: 100, scaleY: 20, name: "profile" },
-	{ x: -40, y: 70, z: 15, scaleX: 80, scaleY: 16, name: "runball" },
-	{ x: -40, y: 50, z: 15, scaleX: 80, scaleY: 16, name: "sixes" },
-	{ x: 60, y: 70, z: 15, scaleX: 80, scaleY: 16, name: "fours" },
-  
-	{ x: 60, y: 50, z: 15, scaleX: 80, scaleY: 16, name: "runs" },
-  ];
   
   // Function to fetch player-wise data
   function fetchPlayerData(playerId) {
@@ -226,280 +217,7 @@ function drawWagonWheels(xVal, yVal, color) {
 	stadium.receiveShadow = true; //shadow
 }
 
-function wagonWheel(data) {
-	_runStore.map((data) => {
-	  let _G = init.instantTrackerGroup.getObjectByName(data.name);
-	  _G.removeFromParent();
-	});
-	_runStore = [];
-	data.balls_details.map((data) => {
-	  console.log(data, "data");
-	  let _N, color;
-	  let _Wx = data.battingAnalysis.shots.wagonWheel.x;
-	  let _Wy = data.battingAnalysis.shots.wagonWheel.y;
-	  if (data.runsBat === 1) {
-		_N = "Ones";
-		color = "0xFFFFFF";
-	  } else if (data.runsBat === 2) {
-		_N = "Twos";
-		color = "0xFFE557";
-	  } else if (data.runsBat === 3) {
-		_N = "Threes";
-		color = "0xFFE557";
-	  } else if (data.runsBat === 4) {
-		_N = "Fours";
-		color = "0x4D5BFF";
-	  } else if (data.runsBat === 6) {
-		_N = "Sixes";
-		color = "0xFF1F1F";
-	  }
-  
-	  // console.log(data.battingAnalysis, _Wx, _Wy);
-  
-	  drawWagonWheels(_Wx, _Wy, color, _N);
-	});
-  }
 
-/*--------------------------------WW Display Lines------------------------------*/
-
-  function displayLines(data) {
-	if (data !== "all") {
-	  let _P = "WagonWheels_" + data;
-	  _runStore.map((data) => {
-		data.name === _P ? (data.visible = true) : (data.visible = false);
-	  });
-	} else {
-	  _runStore.map((data) => {
-		data.visible = true;
-	  });
-	}
-  }
-  
-
-/*--------------------------------Score Display UI------------------------------*/
-
-function scoreDisplay(data, name, size, right, rightCan) {
-	let text;
-	if (name === "runball") {
-	  text = data.runs + " RUNS" + " (" + data.balls + "balls)";
-	} else if (name === "runs") {
-	  text = ` 1's + 2's + 3's =${
-		data.run_details["ones"] +
-		data.run_details["twos"] +
-		data.run_details["threes"]
-	  }`;
-	} else if (name === "fours") {
-	  text = "4's-" + data.run_details["fours"];
-	} else if (name === "sixes") {
-	  text = "6's'-" + data.run_details["sixes"];
-	} else if (name === "profile") {
-	  text = data.name;
-	}
-	//create image
-	let bitmap = createRetinaCanvas(rightCan, 65); //300 ,65
-	let ctx = bitmap.getContext("2d", { antialias: false });
-	ctx.font = "Bold " + size + "px Goldman sans"; //50 for six
-	// ctx.beginPath();
-	// ctx.rect(0, 0, 300, 65);
-	// ctx.fillStyle = 'rgba(255,255,255,.3)'
-  
-	// To change the color on the rectangle, just manipulate the context
-	// ctx.strokeStyle = "rgb(255, 255, 255)";
-	// ctx.lineWidth = 3;
-	// ctx.fillStyle = "rgba(255,255,255, 1)";
-	// ctx.beginPath();
-	// ctx.roundRect(0, 5, 290, 58, 10);
-	// ctx.stroke();
-	// ctx.fill();
-	if (name === "profile") {
-	  ctx.fillStyle = "#ACA08D";
-	} else {
-	  ctx.fillStyle = "white";
-	}
-	// ctx.fillStyle = "red";
-	ctx.textAlign = "center";
-	ctx.fill();
-	ctx.fillText(text, right, 45); //150 ,40
-	console.log(ctx, text);
-	var texture = new THREE.Texture(bitmap);
-	texture.needsUpdate = true;
-	let _SM = init.instantTrackerGroup.getObjectByName("score_" + name);
-	console.log(_SM, "sm here");
-	_SM.material.map = texture;
-	_SM.visible = true;
-	console.log(_SM.material.map, ctx.fillText(text, right, 45));
-  }
-
-/*--------------------------------Display Run Mesh------------------------------*/
-
-function displayRunMesh(data) {
-	let _displayPlayerMesh = init.instantTrackerGroup.getObjectByName("playerImage");
-  
-	_displayPlayerMesh.material.map = texLoader.load(
-	  data.player_image,
-	  function (xhr) {
-		console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
-	  },
-	  function (xhr) {
-		console.log("An error happened");
-	  }
-	);
-	_displayPlayerMesh.needsUpdate = true;
-	_displayPlayerMesh.visible = true;
-	console.log(_displayPlayerMesh);
-  
-	// Loading bg
-	let bg = init.instantTrackerGroup.getObjectByName("playerBg");
-	bg.visible = true;
-	console.log(bg);
-  
-	scoreDisplay(data, "runball", 30, 150, 300);
-	scoreDisplay(data, "runs", 35, 150, 300);
-	scoreDisplay(data, "sixes", 45, 150, 300);
-	scoreDisplay(data, "fours", 45, 150, 300);
-	scoreDisplay(data, "profile", 50, 100, 300);
-  }
-  
-function initializeButtons() {
-
-
-    $(document).ready(function(){
-        let _resData;
-        $.ajax({
-            url: "https://d1u2maujpzk42.cloudfront.net/matchdata/1198/players.json",
-            type: 'GET',
-            success: function(res) {
-                _resData = res;
-                countryDisplay(_resData);
-                playerDisplay(_resData);
-                runsDisplay(_resData.first_innings_score, _resData.first_innings_wicket, _resData.first_innings_over, _resData.first_innings_team_logo);
-            }
-        });
-
-        var runData = [
-            {"run":1,"color":"white","id":"one"},
-            {"run":2,"color":"yellow","id":"two"},
-            {"run":3,"color":"yellow","id":"three"},
-            {"run":4,"color":"blue","id":"four"},
-            {"run":6,"color":"red","id":"six"},
-            {"run":'ALL',"color":"grey","id":"all"}
-        ];
-        scores(runData);
-
-        $('.scoreList').click((e)=>{
-            e.preventDefault();
-            let _Data = e.target.id;
-            wagonWheelDisplay(_Data);
-        });
-
-        // PLAYER DISPLAY
-        $('.inningsOneCountry').click(()=>{
-            $('.firstInningsPlayer').show();
-            $('.secondInningsPlayer').hide();
-            runsDisplay(_resData.first_innings_score, _resData.first_innings_wicket, _resData.first_innings_over, _resData.first_innings_team_logo);
-        });
-
-        $('.inningsTwoCountry').click(()=>{
-            $('.firstInningsPlayer').hide();
-            $('.secondInningsPlayer').show();
-            runsDisplay(_resData.second_innings_score, _resData.second_innings_wicket, _resData.second_innings_over, _resData.second_innings_team_logo);
-        });
-
-        $('.inningsContainer').click((e)=>{
-            playersRunDetails(e.target.id);
-        });
-    });
-
-    const runsDisplay = (score, wicket, overs, teamLogo) => {
-        document.getElementById('teamScore').innerHTML = score + ' / ' + wicket;
-        document.getElementById('overs').innerHTML = overs + ' Ovr';
-        document.getElementById('teamFlag').src = teamLogo;
-    };
-
-    const countryDisplay = (_resData) =>{
-        document.getElementById('inningsOneCountry').innerHTML = _resData.first_innings_shortcode;
-        document.getElementById('inningsTwoCountry').innerHTML = _resData.second_innings_shortcode;
-    };
-
-    const playerDisplay = (_resData) => {
-        const _firstInnPlayer = _resData.first_innings_players;
-        const _secondInnPlayer = _resData.second_innings_players;
-        const playerFirstInn = document.getElementById('firstInningsPlayer');
-        const playerSecondInn = document.getElementById('secondInningsPlayer');
-        addPlayer(_firstInnPlayer, playerFirstInn);
-        addPlayer(_secondInnPlayer, playerSecondInn);
-    };
-
-    const addPlayer = (data, divId) => {
-        data.map((players)=>{
-            let _img = document.createElement('img');
-            _img.setAttribute('style','display: block;margin-left: auto;margin-right: auto;width:32px;border-radius: 50%;');
-            _img.setAttribute('src', `${players.player_image}`);
-            _img.setAttribute('id', `${players.playerid}`);
-            divId.appendChild(_img);
-        });
-    };
-
-    const playersRunDetails = (_playerId) => {
-        $.ajax({
-            url: `https://d1u2maujpzk42.cloudfront.net/matchdata/1198/${_playerId}.json`,
-            type: 'GET',
-            success: function(res) {
-                const _resData = res;
-                displayRunMesh(_resData);
-                wagonWheel(_resData);
-            }
-        });
-    };
-
-    const scores = (runData) => {
-        let cont = document.getElementById("footerContainer");
-        let ul = document.createElement("ul");
-        ul.setAttribute("class", "scoreList");
-
-        runData.map((data) => {
-            let li = document.createElement('li');
-            li.innerHTML = data.run;
-            li.setAttribute('style', `color:${data.color};`);
-            li.setAttribute('id', `${data.id}`);
-
-            // Default border style
-            li.style.border = '2px solid transparent';
-
-            // Add click event listener
-            li.addEventListener('click', () => {
-                // Removing golden border from all buttons
-                runData.map((item) => {
-                    const button = document.getElementById(`${item.id}`);
-                    button.style.border = '2px solid transparent';
-                });
-
-                // Golden border to the clicked button
-                li.style.border = '2px solid goldenrod';
-            });
-
-            ul.appendChild(li);
-        });
-
-        cont.appendChild(ul);
-    };
-
-    const wagonWheelDisplay = (data) => {
-        console.log(data);
-    };
-
-    const teamsScore = () => {
-        
-    };
-
-   
-    countryDisplay(_resData);
-    playerDisplay(_resData);
-    runsDisplay(_resData.first_innings_score, _resData.first_innings_wicket, _resData.first_innings_over, _resData.first_innings_team_logo);
-    scores(runData);
-}
-
-/*--------------------------------Bounding Box------------------------------*/
 
 function boundingBox(model)
 {
@@ -549,7 +267,41 @@ function getPosition(model,reticle)
 	console.log('reticle postion:', reticlePosition);
 }
 
+function addButtons() {
+    const buttonsContainer = document.createElement('div');
+    buttonsContainer.id = 'buttonsContainer';
+    buttonsContainer.style.position = 'fixed';
+    buttonsContainer.style.bottom = '10px';
+    buttonsContainer.style.left = '50%';
+    buttonsContainer.style.color = 'ffffff';
+    buttonsContainer.style.transform = 'translateX(-50%)';
+    
+    const button1 = document.createElement('button');
+    button1.textContent = '1';
+    buttonsContainer.appendChild(button1);
+    
+    const button2 = document.createElement('button');
+    button2.textContent = '2';
+    buttonsContainer.appendChild(button2);
+    
+    const button3 = document.createElement('button');
+    button3.textContent = '3';
+    buttonsContainer.appendChild(button3);
 
+    const button4 = document.createElement('button');
+    button3.textContent = '4';
+    buttonsContainer.appendChild(button4);
+
+    const button6 = document.createElement('button');
+    button3.textContent = '6';
+    buttonsContainer.appendChild(button6);
+
+    const buttonAll = document.createElement('button');
+    button3.textContent = 'All';
+    buttonsContainer.appendChild(buttonAll);
+    
+    document.body.appendChild(buttonsContainer);
+}
 
 /*---------------------------------INIT FUNCTION-------------------------------*/
 
@@ -628,7 +380,6 @@ function init() {
 		
 			model.name="stadium";
 			scene.add(model);
-			wagonWheel(data);
 			drawWagonWheels(0.2,0.8,"0XEB6363"); //red(6's)
 			drawWagonWheels(-0.15,0.25,"0xFEE88A"); //yellow(1/2's)
 			drawWagonWheels(-0.215,-0.15,"0xFEE88A"); //yellow(1/2's)
@@ -651,7 +402,6 @@ function init() {
 
 
 	}
-
 	
     onSelect();
 	controller = renderer.xr.getController( 0 );
@@ -736,8 +486,7 @@ function render( timestamp, frame ) {
 		{
 			reticle.visible = false;
 			scene.remove(parent); //Tap to place text removed when model rendered
-			initializeButtons();
-
+                        addButtons();
 		}
 
 
