@@ -644,7 +644,6 @@ function init() {
 			drawWagonWheels(-0.85,0.85,"0XEB6363"); //red(6's)
 			drawWagonWheels(-0.48,0.48,"0x9EADC3");//blue(4's)
 			drawWagonWheels(0.4,-0.68,"0x9EADC3");//blue(4's)
-			initializeButtons();
 			//boundingBox(model);
 			model_rendered=true;
 
@@ -737,6 +736,7 @@ function render( timestamp, frame ) {
 		{
 			reticle.visible = false;
 			scene.remove(parent); //Tap to place text removed when model rendered
+			initializeButtons();
 
 		}
 
