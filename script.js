@@ -27,6 +27,7 @@ const loadGLTF = (path) => {
 
 let jsonMatchData, jsonPlayerStat;
 var firstInningsData, secondInningsData;
+var one, two, three, four, six;
 
 // Function to fetch general data
 function fetchMatchData() {
@@ -36,6 +37,11 @@ function fetchMatchData() {
 	  .then(response => response.json())
 	  .then(data => {
 		jsonMatchData=data;
+		one = data.run_details.one;
+		two =  data.run_details.two;
+		three = data.run_details. three;
+		four =  data.run_details.four;
+		six = data.run_details.six;
 		//console.log(data);
 		firstInningsData = data.first_innings_players;
         secondInningsData = data.second_innings_players;  
@@ -88,15 +94,15 @@ function fetchMatchData() {
 
     	balls.forEach(ball => {
 		const runs = ball.runsBat;
-		const pitchMapX = ball.bowlingAnalysis.pitchMap.x;
-		const pitchMapY = ball.bowlingAnalysis.pitchMap.y;
-		const balllandingPosition = { x: pitchMapX, y: pitchMapY };
+		// const pitchMapX = ball.bowlingAnalysis.pitchMap.x;
+		// const pitchMapY = ball.bowlingAnalysis.pitchMap.y;
+		// const balllandingPosition = { x: pitchMapX, y: pitchMapY };
 		const arrivalX = ball.battingAnalysis.arrival.x;
 		const arrivalY = ball.battingAnalysis.arrival.y;
 		const landingPosition = { x: arrivalX, y: arrivalY };
 
 		console.log("Runs:", runs);
-		console.log("Ball Pitch Landing Position:", balllandingPosition);
+		// console.log("Ball Pitch Landing Position:", balllandingPosition);
 		console.log("Ball Landing Position:", landingPosition);
 		});
 
@@ -267,42 +273,6 @@ function getPosition(model,reticle)
 	console.log('reticle postion:', reticlePosition);
 }
 
-function addButtons() {
-    const buttonsContainer = document.createElement('div');
-    buttonsContainer.id = 'buttonsContainer';
-    buttonsContainer.style.position = 'fixed';
-    buttonsContainer.style.bottom = '10px';
-    buttonsContainer.style.left = '50%';
-    buttonsContainer.style.color = 'ffffff';
-    buttonsContainer.style.transform = 'translateX(-50%)';
-    
-    const button1 = document.createElement('button');
-    button1.textContent = '1';
-    buttonsContainer.appendChild(button1);
-    
-    const button2 = document.createElement('button');
-    button2.textContent = '2';
-    buttonsContainer.appendChild(button2);
-    
-    const button3 = document.createElement('button');
-    button3.textContent = '3';
-    buttonsContainer.appendChild(button3);
-
-    const button4 = document.createElement('button');
-    button3.textContent = '4';
-    buttonsContainer.appendChild(button4);
-
-    const button6 = document.createElement('button');
-    button3.textContent = '6';
-    buttonsContainer.appendChild(button6);
-
-    const buttonAll = document.createElement('button');
-    button3.textContent = 'All';
-    buttonsContainer.appendChild(buttonAll);
-    
-    document.body.appendChild(buttonsContainer);
-}
-
 /*---------------------------------INIT FUNCTION-------------------------------*/
 
 
@@ -380,21 +350,112 @@ function init() {
 		
 			model.name="stadium";
 			scene.add(model);
-			drawWagonWheels(0.2,0.8,"0XEB6363"); //red(6's)
-			drawWagonWheels(-0.15,0.25,"0xFEE88A"); //yellow(1/2's)
-			drawWagonWheels(-0.215,-0.15,"0xFEE88A"); //yellow(1/2's)
-			drawWagonWheels(0.25,0.3,"0xFEE88A"); //yellow(1/2's)
-			drawWagonWheels(-0.1,0.46,"0xFEE88A"); //yellow(1/2's)
-			drawWagonWheels(0.4,-0.1,"0xFEE88A"); //yellow(1/2's)
-			drawWagonWheels(-0.5,0.15,"0xFEE88A"); //yellow(1/2's)
-			drawWagonWheels(0.8,0.38,"0x8EB6F0"); // **blue(4's)
-			drawWagonWheels(-0.6,-0.6,"0XEB6363"); //red(6's)
-			drawWagonWheels(-0.68,0.8,"0x9EADC3");//blue(4's)
-			drawWagonWheels(-0.8,-0.18,"0x9EADC3");//blue(4's)
-			drawWagonWheels(0.7,0.7,"0XEB6363"); //red(6's)
-			drawWagonWheels(-0.85,0.85,"0XEB6363"); //red(6's)
-			drawWagonWheels(-0.48,0.48,"0x9EADC3");//blue(4's)
-			drawWagonWheels(0.4,-0.68,"0x9EADC3");//blue(4's)
+			
+			for(int i=0; i<=one; i++) {
+				if(landingPosition.x >0 && landingPosition.y >0) {
+					drawWagonWheels(0.15,0.25,"0xFEE88A"); //yellow(1/2's)
+				}
+				if(landingPosition.x >0 && landingPosition.y <0) {
+					drawWagonWheels(0.15,-0.25,"0xFEE88A"); //yellow(1/2's)
+				}
+				if(landingPosition.x <0 && landingPosition.y >0) {
+					drawWagonWheels(-0.15,0.25,"0xFEE88A"); //yellow(1/2's)
+				}
+				if(landingPosition.x <0 && landingPosition.y <0) {
+					drawWagonWheels(-0.15,-0.25,"0xFEE88A"); //yellow(1/2's)
+				}
+			}
+
+			for(let i=0; i<=one; i++) {
+				if(landingPosition.x >0 && landingPosition.y >0) {
+					drawWagonWheels(0.15,0.25,"0xFEE88A"); //yellow(1/2's)
+				}
+				if(landingPosition.x >0 && landingPosition.y <0) {
+					drawWagonWheels(0.15,-0.25,"0xFEE88A"); //yellow(1/2's)
+				}
+				if(landingPosition.x <0 && landingPosition.y >0) {
+					drawWagonWheels(-0.15,0.25,"0xFEE88A"); //yellow(1/2's)
+				}
+				if(landingPosition.x <0 && landingPosition.y <0) {
+					drawWagonWheels(-0.15,-0.25,"0xFEE88A"); //yellow(1/2's)
+				}
+			}
+
+			for(let i=0; i<=two; i++) {
+				if(landingPosition.x >0 && landingPosition.y >0) {
+					drawWagonWheels(0.215,0.15,"0xFEE88A"); //yellow(1/2's)
+				}
+				if(landingPosition.x >0 && landingPosition.y <0) {
+					drawWagonWheels(0.215,-0.15,"0xFEE88A"); //yellow(1/2's)
+				}
+				if(landingPosition.x <0 && landingPosition.y >0) {
+					drawWagonWheels(-0.215,0.15,"0xFEE88A"); //yellow(1/2's)
+				}
+				if(landingPosition.x <0 && landingPosition.y <0) {
+					drawWagonWheels(-0.215,-0.15,"0xFEE88A"); //yellow(1/2's)
+				}
+			}
+
+			for(let i=0; i<=three; i++) {
+				if(landingPosition.x >0 && landingPosition.y >0) {
+					drawWagonWheels(0.5,0.15,"0xFEE88A")
+				}
+				if(landingPosition.x >0 && landingPosition.y <0) {
+					drawWagonWheels(0.5,-0.15,"0xFEE88A"); //yellow(1/2's)
+				}
+				if(landingPosition.x <0 && landingPosition.y >0) {
+					drawWagonWheels(-0.5,0.15,"0xFEE88A"); //yellow(1/2's)
+				}
+				if(landingPosition.x <0 && landingPosition.y <0) {
+					drawWagonWheels(-0.5,-0.15,"0xFEE88A"); //yellow(1/2's)
+				}
+			}
+
+			for(let i=0; i<=four; i++) {
+				if(landingPosition.x >0 && landingPosition.y >0) {
+					drawWagonWheels(0.8,0.18,"0x9EADC3");//blue(4's)
+				}
+				if(landingPosition.x >0 && landingPosition.y <0) {
+					drawWagonWheels(0.8,-0.18,"0x9EADC3");//blue(4's)
+				}
+				if(landingPosition.x <0 && landingPosition.y >0) {
+					drawWagonWheels(-0.8,0.18,"0x9EADC3");//blue(4's)
+				}
+				if(landingPosition.x <0 && landingPosition.y <0) {
+					drawWagonWheels(-0.8,-0.18,"0x9EADC3");//blue(4's)
+				}
+			}
+
+			for(let i=0; i<=six; i++) {
+				if(landingPosition.x >0 && landingPosition.y >0) {
+					drawWagonWheels(0.2,0.8,"0xFEE88A"); //red(6's)
+				}
+				if(landingPosition.x >0 && landingPosition.y <0) {
+					drawWagonWheels(0.2,-0.8,"0xFEE88A"); //red(6's)
+				}
+				if(landingPosition.x <0 && landingPosition.y >0) {
+					drawWagonWheels(-0.2,0.8,"0xFEE88A"); //red(6's)
+				}
+				if(landingPosition.x <0 && landingPosition.y <0) {
+					drawWagonWheels(-0.2,-0.8,"0xFEE88A"); //red(6's)
+				}
+			}
+			
+			// drawWagonWheels(0.2,0.8,"0XEB6363"); //red(6's)
+			// drawWagonWheels(-0.15,0.25,"0xFEE88A"); //yellow(1/2's)
+			// drawWagonWheels(-0.215,-0.15,"0xFEE88A"); //yellow(1/2's)
+			// drawWagonWheels(0.25,0.3,"0xFEE88A"); //yellow(1/2's)
+			// drawWagonWheels(-0.1,0.46,"0xFEE88A"); //yellow(1/2's)
+			// drawWagonWheels(0.4,-0.1,"0xFEE88A"); //yellow(1/2's)
+			// drawWagonWheels(-0.5,0.15,"0xFEE88A"); //yellow(1/2's)
+			// drawWagonWheels(0.8,0.38,"0x8EB6F0"); // **blue(4's)
+			// drawWagonWheels(-0.6,-0.6,"0XEB6363"); //red(6's)
+			// drawWagonWheels(-0.68,0.8,"0x9EADC3");//blue(4's)
+			// drawWagonWheels(-0.8,-0.18,"0x9EADC3");//blue(4's)
+			// drawWagonWheels(0.7,0.7,"0XEB6363"); //red(6's)
+			// drawWagonWheels(-0.85,0.85,"0XEB6363"); //red(6's)
+			// drawWagonWheels(-0.48,0.48,"0x9EADC3");//blue(4's)
+			// drawWagonWheels(0.4,-0.68,"0x9EADC3");//blue(4's)
 			//boundingBox(model);
 			model_rendered=true;
 
@@ -475,7 +536,6 @@ function render( timestamp, frame ) {
 			reticle.visible = true;
 			reticle.matrix.fromArray( hit.getPose( referenceSpace ).transform.matrix );
 			scene.add(parent); //Tap to place text added when model visible
-			addButtons();
 			
 
 		} else {
@@ -487,7 +547,7 @@ function render( timestamp, frame ) {
 		{
 			reticle.visible = false;
 			scene.remove(parent); //Tap to place text removed when model rendered
-                        addButtons();
+
 		}
 
 
