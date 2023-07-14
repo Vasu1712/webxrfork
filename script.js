@@ -475,6 +475,7 @@ function render( timestamp, frame ) {
 			reticle.visible = true;
 			reticle.matrix.fromArray( hit.getPose( referenceSpace ).transform.matrix );
 			scene.add(parent); //Tap to place text added when model visible
+			addButtons();
 			
 
 		} else {
