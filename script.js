@@ -4,6 +4,8 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 import { FontLoader } from 'three/addons/loaders/FontLoader.js';
+import { playerDetail1, playerDetail2 } from "./data.js";
+
 
 let container;
 let camera, scene, renderer;
@@ -12,6 +14,7 @@ let controls;
 let reticle, parent,textMesh;
 let hitTestSource = null;
 let hitTestSourceRequested = false;
+let currCountry;
 
 /*-----------------Loading Model-----------------------------------------*/	
 const loadGLTF = (path) => {
@@ -27,83 +30,257 @@ const loadGLTF = (path) => {
 
 let jsonMatchData, jsonPlayerStat;
 var firstInningsData, secondInningsData;
-var one, two, three, four, six;
-
+let firstInningsPlayerNames, firstInningsPlayerImages, secondInningsPlayerImages, secondInningsPlayerNames, firstInningsCountry, secondInningsCountry;
 // Function to fetch general data
-function fetchMatchData() {
+const fetchMatchData = () => {
 	const url = 'https://d1u2maujpzk42.cloudfront.net/icc-scores/ef884c07-5b63-4a42-ac72-3947471c43ec/player.json';
   
 	return fetch(url)
 	  .then(response => response.json())
 	  .then(data => {
 		jsonMatchData=data;
-		one = data.run_details.one;
-		two =  data.run_details.two;
-		three = data.run_details. three;
-		four =  data.run_details.four;
-		six = data.run_details.six;
 		//console.log(data);
 		firstInningsData = data.first_innings_players;
         secondInningsData = data.second_innings_players;  
-        console.log(firstInningsData)
-        console.log(secondInningsData)
+        // console.log(firstInningsData)
+        // console.log(secondInningsData)
 
-		const firstInningsPlayerNames = data.first_innings_players.map(player => player.player_name);
-      	const secondInningsPlayerNames = data.second_innings_players.map(player => player.player_name);
+		firstInningsPlayerNames = data.first_innings_players.map(player => player.player_name);
+      	secondInningsPlayerNames = data.second_innings_players.map(player => player.player_name);
 
-		console.log("First Inning Player Names:", firstInningsPlayerNames);
-      	console.log("Second Inning Player Names:", secondInningsPlayerNames);
+		// console.log("First Inning Player Names:", firstInningsPlayerNames);
+      	// console.log("Second Inning Player Names:", secondInningsPlayerNames);
 
-		const firstInningsPlayerImages = data.first_innings_players.map(player => player.player_image);
-      	const secondInningsPlayerImages = data.second_innings_players.map(player => player.player_image);
+		firstInningsPlayerImages = data.first_innings_players.map(player => player.player_image);
+      	secondInningsPlayerImages = data.second_innings_players.map(player => player.player_image);
       
-     	console.log("First Inning Player Names:", firstInningsPlayerImages);
-      	console.log("Second Inning Player Names:", secondInningsPlayerImages);
+     	// console.log("First Inning Player Names:", firstInningsPlayerImages);
+      	// console.log("Second Inning Player Names:", secondInningsPlayerImages);
 
-		const firstInningsCountry = {
+		firstInningsCountry = {
 			name: data.first_innings,
 			flag: data.first_innings_team_logo,
-			short_code: data.first_innings_shortcode
+			short_code: data.first_innings_shortcode,
+			score: data.first_innings_score,
+			wicket: data.first_innings_wicket,
+			overs: data.first_innings_over
 		  };
-		  
-		const secondInningsCountry = {
+		  /*"first_innings_score":"339","first_innings_wicket":"7","first_innings_over":"50"*/
+		secondInningsCountry = {
 			name: data.second_innings,
 			flag: data.second_innings_team_logo,
-			short_code: data.second_innings_shortcode
+			short_code: data.second_innings_shortcode,
+			score: data.second_innings_score,
+			wicket: data.second_innings_wicket,
+			overs: data.second_innings_over
 		  };
 
-		console.log("First innings Country & Flag:",firstInningsCountry); 
-		console.log("Second innings Country & Flag:", secondInningsCountry);
-		
+		currCountry=firstInningsCountry;
+
+		/*------Country Buttons---------*/
+		// Get the elements
+			const country1Button = document.getElementById('country1-button');
+			const country2Button = document.getElementById('country2-button');
+
+			country1Button.textContent = firstInningsCountry.short_code;
+			country2Button.textContent = secondInningsCountry.short_code;
+
+			country1Button.addEventListener('click', function() {
+				country1Button.classList.add('active');
+				country2Button.classList.remove('active');
+				currCountry=firstInningsCountry;
+				runsDisplay(
+					currCountry.score,
+					currCountry.wicket,
+					currCountry.overs,
+					currCountry.flag
+				  );
+				playerDisplay(playerDetail1);
+			});
+			
+			country2Button.addEventListener('click', function() {
+				country2Button.classList.add('active');
+				country1Button.classList.remove('active');
+				currCountry=secondInningsCountry;
+				runsDisplay(
+					currCountry.score,
+					currCountry.wicket,
+					currCountry.overs,
+					currCountry.flag
+				  );
+				playerDisplay(playerDetail2);
+			});
+
+		/*-------------RUN DISPLAY------------------*/
+		const runsDisplay = (score, wicket, overs, teamLogo) => {
+			document.getElementById("teamScore").innerHTML = score + " / " + wicket;
+			document.getElementById("overs").innerHTML = overs + " Ovr";
+			document.getElementById("teamFlag").src = teamLogo;
+			//console.log(wicket);
+		  };
+		  runsDisplay(
+			currCountry.score,
+			currCountry.wicket,
+			currCountry.overs,
+			currCountry.flag
+		  );
+
+		/*----------PLAYER DISPLAY---------------------*/
+	// const playerData1=[];
+	// const playerData2=[];
+
+
+	/* -------------------------------------------------*/
+	//	console.log(playerData1);
+	//	console.log(data.first_innings);
+		function playerDisplay(playerData){
+			const scrollBar = document.getElementById("scroll-bar");
+
+			// Clear the existing content (if any)
+			scrollBar.innerHTML = "";
+		  
+			// Populate the player list dynamically
+			playerData.forEach((player) => {
+			  const playerElement = document.createElement("div");
+			  playerElement.classList.add("player");
+		  
+			  const imgElement = document.createElement("img");
+			  imgElement.src = player.playerImage;
+			  imgElement.alt = player.playerName;
+		  
+			  const nameElement = document.createElement("div");
+			  nameElement.classList.add("player-name");
+			  nameElement.textContent = player.playerName;
+		  
+			  playerElement.appendChild(imgElement);
+			  playerElement.appendChild(nameElement);
+
+
+			  // Add click event listener to select the player
+			  playerElement.addEventListener("click", function () {
+				// Remove the "selected" class from all players
+				const players = Array.from(scrollBar.getElementsByClassName("player"));
+				players.forEach((p) => p.classList.remove("selected"));
+		  
+				// Add the "selected" class to the clicked player
+				playerElement.classList.add("selected");
+				
+				// Clear previous player stats from the transparent HTML div
+				const playerStatsDiv = document.getElementById('playerStats');
+				playerStatsDiv.innerHTML = '';
+
+				// Display the player stats in the transparent HTML div
+				// const playerStatsText = `<p>Name: ${player.playerName}</p><p>Balls: ${player.balls}</p><p>Runs: ${player.runs}</p>`;
+				// playerStatsDiv.innerHTML = playerStatsText;
+				const playerName = `<p><span class="stat-label">Name:</span> <span class="stat-value">${player.playerName}</span></p>`;
+				const balls = `<p><span class="stat-label">Balls:</span> <span class="stat-value">${player.balls}</span></p>`;
+				const runs = `<p><span class="stat-label">Runs:</span> <span class="stat-value">${player.runs}</span></p>`;
+
+				playerStatsDiv.innerHTML = playerName + balls + runs;
+				playerStatsDiv.style.display = "block";
+
+				// const playerImage = `<img src="${player.playerImage}" alt="Player Image">`;
+				// const playerName = `<p><span class="stat-label">Name:</span> <span class="stat-value">${player.playerName}</span></p>`;
+				// const balls = `<p><span class="stat-label">Balls:</span> <span class="stat-value">${player.balls}</span></p>`;
+				// const runs = `<p><span class="stat-label">Runs:</span> <span class="stat-value">${player.runs}</span></p>`;
+				
+				// //const playerStatsDiv = document.getElementById("playerStats");
+				// playerStatsDiv.innerHTML = `
+				//   <div class="player-image">${playerImage}</div>
+				//   <div class="player-info">
+				// 	${playerName}
+				// 	${balls}
+				// 	${runs}
+				//   </div>
+				// `;
+				
+
+
+			  });
+		   
+			  scrollBar.appendChild(playerElement);
+			});
+		}
+		playerDisplay(playerDetail1);
+		/*------------------Player Stat Display-----------------------*/
+
+		  function updatePlayerStats(playerData) {
+
+			// Clear previous player stats from the transparent HTML div
+			const playerStatsDiv = document.getElementById('playerStats');
+			playerStatsDiv.innerHTML = '';
+
+			// Display the player stats in the transparent HTML div
+			const playerStatsText = `<p>Name: ${player.playerName}</p><p>Balls: ${playerData.balls}</p><p>Runs: ${playerData.runs}</p>`;
+			playerStatsDiv.innerHTML = playerStatsText;
+			
+	
+		  }
+		  
+
+
+
+
+		/*----------------------------------------------------------*/
+
 	  })
 	  .catch(error => {
 		console.error('Error fetching general data:', error);
 	  });
   }
   
+
   // Function to fetch player-wise data
-  function fetchPlayerData(playerId) {
-	const url = `https://d1u2maujpzk42.cloudfront.net/icc-scores/ef884c07-5b63-4a42-ac72-3947471c43ec/${playerId}.json`;
+  const fetchPlayerData = (data_url) =>{
+	const url = data_url;
 	
 	return fetch(url)
 	  .then(response => response.json())
 	  .then(data => {
 		jsonPlayerStat=data;
-		console.log(`Player ID: ${playerId}, Player Name:${data.name}'s Data`, data);
+		//console.log(`Player ID: ${playerId}, Player Name:${data.name}'s Data`, data);
 		const balls = data.balls_details;
 
     	balls.forEach(ball => {
-		const runs = ball.runsBat;
-		// const pitchMapX = ball.bowlingAnalysis.pitchMap.x;
-		// const pitchMapY = ball.bowlingAnalysis.pitchMap.y;
-		// const balllandingPosition = { x: pitchMapX, y: pitchMapY };
+		//const runs = ball.runsBat;
+		const pitchMapX = ball.bowlingAnalysis.pitchMap.x;
+		const pitchMapY = ball.bowlingAnalysis.pitchMap.y;
+		const balllandingPosition = { x: pitchMapX, y: pitchMapY };
 		const arrivalX = ball.battingAnalysis.arrival.x;
 		const arrivalY = ball.battingAnalysis.arrival.y;
 		const landingPosition = { x: arrivalX, y: arrivalY };
 
-		console.log("Runs:", runs);
+		// console.log("Runs:", runs);
 		// console.log("Ball Pitch Landing Position:", balllandingPosition);
-		console.log("Ball Landing Position:", landingPosition);
+		// console.log("Ball Landing Position:", landingPosition);
+		const playerId = data.id;
+		const playerName = data.name;
+		const balls = data.balls;
+		const runs = data.runs;
+		const ballDetails = data.balls_details.map(ball => ({
+			runs: ball.runsBat,
+			arrivalX: ball.battingAnalysis.arrival.x,
+			arrivalY: ball.battingAnalysis.arrival.y
+		}));
+		const runDetails = data.run_details;
+		const ones = runDetails.ones;
+		const twos = runDetails.twos;
+		const threes = runDetails.threes;
+		const fours = runDetails.fours;
+		const sixes = runDetails.sixes;
+		// Return the extracted player data
+		return {
+			playerId,
+			playerName,
+			balls,
+			runs,
+			ballDetails,
+			ones,
+			twos,
+			threes,
+			fours,
+			sixes
+		};
 		});
 
 	  })
@@ -111,15 +288,48 @@ function fetchMatchData() {
 		console.error('Error fetching player data:', error);
 	  });
   }
-  
+
 
 // Checking the functions
 fetchMatchData(); // Fetch overall data
-fetchPlayerData('999c8498-7b17-4a81-8ea5-9e366c535862'); // Fetch player-wise data for player with ID
+// fetchPlayerData("999c8498-7b17-4a81-8ea5-9e366c535862"); // Fetch player-wise data for player with ID
+
+/*----------------------------------Adding UI------------------------------- */
+
+const tapToPlaceButton = document.getElementById('tap-to-place-button');
+const wagonwheelButton = document.getElementById('wagonwheel-button');
+const overlay = document.getElementById('overlay');
+
+/*------------------------------Buttons-------------------------------------*/
+
+
+/*
+
+// Add event listeners to the buttons
+buttons.forEach(button => {
+  button.addEventListener('click', () => {
+    // Toggle the 'clicked' class
+    button.classList.toggle('clicked');
+
+    // Hide the tap to place button when it is clicked
+    if (button === tapToPlaceButton) {
+      button.style.display = 'none';
+    }
+
+    // Show/hide the country buttons and wagonwheel button based on tap to place button state
+    const tapToPlaceClicked = tapToPlaceButton.classList.contains('clicked');
+    country1Button.style.display = tapToPlaceClicked ? 'block' : 'none';
+    country2Button.style.display = tapToPlaceClicked ? 'block' : 'none';
+    wagonwheelButton.style.display = tapToPlaceClicked ? 'block' : 'none';
+  });
+});
+*/
+
+
 
 
 /*-----------------Adding the Tap to Place Text-----------------------------*/
-
+/*
 const loader = new FontLoader()
 // promisify font loading
 function loadFont(url) {
@@ -174,7 +384,7 @@ async function placeText() {
 	parent.name="tapToPlace";
 
 }
-
+*/
 let model_rendered=false;
 
 /*--------------------------------Adding Wagon wheel------------------------------*/
@@ -273,6 +483,8 @@ function getPosition(model,reticle)
 	console.log('reticle postion:', reticlePosition);
 }
 
+
+
 /*---------------------------------INIT FUNCTION-------------------------------*/
 
 
@@ -285,12 +497,6 @@ function init() {
 	scene = new THREE.Scene();
 
 	camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.01, 20 );
-
-	// const light = new THREE.HemisphereLight( 0xffffff, 0xbbbbff, 1 );
-	// light.position.set( 0.5, 1, 0.25 );
-	// scene.add( light )
-
-	//shadowLighting
 	
 	const light = new THREE.DirectionalLight(0xffffff, 1);
 	light.position.set(0, 10, 0);
@@ -318,10 +524,16 @@ function init() {
 	controls.dampingFactor = 0.05;
 
 	let options = {
-		requiredFeatures: ['hit-test','dom-overlay'],
-	}
+		requiredFeatures: ["hit-test"],
+		optionalFeatures: ["dom-overlay"],
+		domOverlay : {root: document.body},
+
+	};
 	//options.domOverlay = {root: document.getElementById('content-ar')};
 	document.body.appendChild( ARButton.createButton( renderer, options ) );
+//	document.body.appendChild( UI.createButton( renderer, options ) );
+
+
 
 	reticle = new THREE.Mesh(
 		new THREE.RingGeometry( 0.15, 0.2, 32 ).rotateX( - Math.PI / 2 ),
@@ -331,7 +543,7 @@ function init() {
 	reticle.visible = false;
 	scene.add( reticle );	
 		
-	placeText();
+	//placeText();
 	//parent.visible=false;
 	// console.log(textMesh.visible);
 	// console.log(parent.visible);
@@ -350,121 +562,35 @@ function init() {
 		
 			model.name="stadium";
 			scene.add(model);
-			
-			for(int i=0; i<=one; i++) {
-				if(landingPosition.x >0 && landingPosition.y >0) {
-					drawWagonWheels(0.15,0.25,"0xFEE88A"); //yellow(1/2's)
-				}
-				if(landingPosition.x >0 && landingPosition.y <0) {
-					drawWagonWheels(0.15,-0.25,"0xFEE88A"); //yellow(1/2's)
-				}
-				if(landingPosition.x <0 && landingPosition.y >0) {
-					drawWagonWheels(-0.15,0.25,"0xFEE88A"); //yellow(1/2's)
-				}
-				if(landingPosition.x <0 && landingPosition.y <0) {
-					drawWagonWheels(-0.15,-0.25,"0xFEE88A"); //yellow(1/2's)
-				}
-			}
-
-			for(let i=0; i<=one; i++) {
-				if(landingPosition.x >0 && landingPosition.y >0) {
-					drawWagonWheels(0.15,0.25,"0xFEE88A"); //yellow(1/2's)
-				}
-				if(landingPosition.x >0 && landingPosition.y <0) {
-					drawWagonWheels(0.15,-0.25,"0xFEE88A"); //yellow(1/2's)
-				}
-				if(landingPosition.x <0 && landingPosition.y >0) {
-					drawWagonWheels(-0.15,0.25,"0xFEE88A"); //yellow(1/2's)
-				}
-				if(landingPosition.x <0 && landingPosition.y <0) {
-					drawWagonWheels(-0.15,-0.25,"0xFEE88A"); //yellow(1/2's)
-				}
-			}
-
-			for(let i=0; i<=two; i++) {
-				if(landingPosition.x >0 && landingPosition.y >0) {
-					drawWagonWheels(0.215,0.15,"0xFEE88A"); //yellow(1/2's)
-				}
-				if(landingPosition.x >0 && landingPosition.y <0) {
-					drawWagonWheels(0.215,-0.15,"0xFEE88A"); //yellow(1/2's)
-				}
-				if(landingPosition.x <0 && landingPosition.y >0) {
-					drawWagonWheels(-0.215,0.15,"0xFEE88A"); //yellow(1/2's)
-				}
-				if(landingPosition.x <0 && landingPosition.y <0) {
-					drawWagonWheels(-0.215,-0.15,"0xFEE88A"); //yellow(1/2's)
-				}
-			}
-
-			for(let i=0; i<=three; i++) {
-				if(landingPosition.x >0 && landingPosition.y >0) {
-					drawWagonWheels(0.5,0.15,"0xFEE88A")
-				}
-				if(landingPosition.x >0 && landingPosition.y <0) {
-					drawWagonWheels(0.5,-0.15,"0xFEE88A"); //yellow(1/2's)
-				}
-				if(landingPosition.x <0 && landingPosition.y >0) {
-					drawWagonWheels(-0.5,0.15,"0xFEE88A"); //yellow(1/2's)
-				}
-				if(landingPosition.x <0 && landingPosition.y <0) {
-					drawWagonWheels(-0.5,-0.15,"0xFEE88A"); //yellow(1/2's)
-				}
-			}
-
-			for(let i=0; i<=four; i++) {
-				if(landingPosition.x >0 && landingPosition.y >0) {
-					drawWagonWheels(0.8,0.18,"0x9EADC3");//blue(4's)
-				}
-				if(landingPosition.x >0 && landingPosition.y <0) {
-					drawWagonWheels(0.8,-0.18,"0x9EADC3");//blue(4's)
-				}
-				if(landingPosition.x <0 && landingPosition.y >0) {
-					drawWagonWheels(-0.8,0.18,"0x9EADC3");//blue(4's)
-				}
-				if(landingPosition.x <0 && landingPosition.y <0) {
-					drawWagonWheels(-0.8,-0.18,"0x9EADC3");//blue(4's)
-				}
-			}
-
-			for(let i=0; i<=six; i++) {
-				if(landingPosition.x >0 && landingPosition.y >0) {
-					drawWagonWheels(0.2,0.8,"0xFEE88A"); //red(6's)
-				}
-				if(landingPosition.x >0 && landingPosition.y <0) {
-					drawWagonWheels(0.2,-0.8,"0xFEE88A"); //red(6's)
-				}
-				if(landingPosition.x <0 && landingPosition.y >0) {
-					drawWagonWheels(-0.2,0.8,"0xFEE88A"); //red(6's)
-				}
-				if(landingPosition.x <0 && landingPosition.y <0) {
-					drawWagonWheels(-0.2,-0.8,"0xFEE88A"); //red(6's)
-				}
-			}
-			
-			// drawWagonWheels(0.2,0.8,"0XEB6363"); //red(6's)
-			// drawWagonWheels(-0.15,0.25,"0xFEE88A"); //yellow(1/2's)
-			// drawWagonWheels(-0.215,-0.15,"0xFEE88A"); //yellow(1/2's)
-			// drawWagonWheels(0.25,0.3,"0xFEE88A"); //yellow(1/2's)
-			// drawWagonWheels(-0.1,0.46,"0xFEE88A"); //yellow(1/2's)
-			// drawWagonWheels(0.4,-0.1,"0xFEE88A"); //yellow(1/2's)
-			// drawWagonWheels(-0.5,0.15,"0xFEE88A"); //yellow(1/2's)
-			// drawWagonWheels(0.8,0.38,"0x8EB6F0"); // **blue(4's)
-			// drawWagonWheels(-0.6,-0.6,"0XEB6363"); //red(6's)
-			// drawWagonWheels(-0.68,0.8,"0x9EADC3");//blue(4's)
-			// drawWagonWheels(-0.8,-0.18,"0x9EADC3");//blue(4's)
-			// drawWagonWheels(0.7,0.7,"0XEB6363"); //red(6's)
-			// drawWagonWheels(-0.85,0.85,"0XEB6363"); //red(6's)
-			// drawWagonWheels(-0.48,0.48,"0x9EADC3");//blue(4's)
-			// drawWagonWheels(0.4,-0.68,"0x9EADC3");//blue(4's)
+			drawWagonWheels(0.2,0.8,"0XEB6363"); //red(6's)
+			drawWagonWheels(-0.15,0.25,"0xFEE88A"); //yellow(1/2's)
+			drawWagonWheels(-0.215,-0.15,"0xFEE88A"); //yellow(1/2's)
+			drawWagonWheels(0.25,0.3,"0xFEE88A"); //yellow(1/2's)
+			drawWagonWheels(-0.1,0.46,"0xFEE88A"); //yellow(1/2's)
+			drawWagonWheels(0.4,-0.1,"0xFEE88A"); //yellow(1/2's)
+			drawWagonWheels(-0.5,0.15,"0xFEE88A"); //yellow(1/2's)
+			drawWagonWheels(0.8,0.38,"0x8EB6F0"); // **blue(4's)
+			drawWagonWheels(-0.6,-0.6,"0XEB6363"); //red(6's)
+			drawWagonWheels(-0.68,0.8,"0x9EADC3");//blue(4's)
+			drawWagonWheels(-0.8,-0.18,"0x9EADC3");//blue(4's)
+			drawWagonWheels(0.7,0.7,"0XEB6363"); //red(6's)
+			drawWagonWheels(-0.85,0.85,"0XEB6363"); //red(6's)
+			drawWagonWheels(-0.48,0.48,"0x9EADC3");//blue(4's)
+			drawWagonWheels(0.4,-0.68,"0x9EADC3");//blue(4's)
 			//boundingBox(model);
 			model_rendered=true;
+			//const tapToPlaceButton = document.getElementById('tap-to-place-button');
+			// To hide the button
+			tapToPlaceButton.style.display = 'none';
+			// createButtons();
 
 		}
 
 
 	}
-	
+
     onSelect();
+
 	controller = renderer.xr.getController( 0 );
 	controller.addEventListener( 'select', onSelect );
 	scene.add( controller );
@@ -514,6 +640,7 @@ function render( timestamp, frame ) {
 
 	} );
 
+
 	session.addEventListener( 'end', function () {
 
 		hitTestSourceRequested = false;
@@ -535,7 +662,9 @@ function render( timestamp, frame ) {
 
 			reticle.visible = true;
 			reticle.matrix.fromArray( hit.getPose( referenceSpace ).transform.matrix );
-			scene.add(parent); //Tap to place text added when model visible
+			//scene.add(parent); //Tap to place text added when model visible
+			tapToPlaceButton.style.display = 'block';
+			
 			
 
 		} else {
@@ -546,7 +675,8 @@ function render( timestamp, frame ) {
 		if(model_rendered)
 		{
 			reticle.visible = false;
-			scene.remove(parent); //Tap to place text removed when model rendered
+			tapToPlaceButton.style.display = 'none';
+			//scene.remove(parent); //Tap to place text removed when model rendered
 
 		}
 
