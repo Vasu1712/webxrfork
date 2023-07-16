@@ -84,18 +84,21 @@
   font-weight: 500;
   font-size: 12px;
   margin-top: 5px;
-  color: #161616;
+  color: whitesmoke;
   font-family: 'Poppins', sans-serif;
 }
 
 .player.selected {
-  background-color: none;
   border-radius: 10px;
-  border: 1px solid #161616;
+  border: 1px solid white;
   color: #ffffff;
   font-family: 'Poppins', sans-serif;
   font-size: 14px;
   font-weight: 600 !important;
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
 }
 
 .teamScoreContainer {
@@ -229,7 +232,6 @@
   cursor: pointer;
   border-radius: 4px;
   margin: 5px;
-  background-color: none;
   background: rgba(255, 255, 255, 0.2);
   border-radius: 16px;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
