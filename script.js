@@ -299,6 +299,17 @@ fetchMatchData(); // Fetch overall data
 const tapToPlaceButton = document.getElementById('tap-to-place-button');
 const wagonwheelButton = document.getElementById('wagonwheel-button');
 const overlay = document.getElementById('overlay');
+const buttons = document.querySelectorAll('.runBtn .rbutton');
+
+buttons.forEach(button => {
+  button.addEventListener('click', () => {
+    // Remove the 'active' class from all buttons
+    buttons.forEach(btn => btn.classList.remove('active'));
+
+    // Add the 'active' class to the clicked button
+    button.classList.add('active');
+  });
+});
 
 /*------------------------------Buttons-------------------------------------*/
 
