@@ -573,21 +573,25 @@ function init() {
 		
 			model.name="stadium";
 			scene.add(model);
-			drawWagonWheels(0.2,0.8,"0XEB6363"); //red(6's)
-			drawWagonWheels(-0.15,0.25,"0xFEE88A"); //yellow(1/2's)
-			drawWagonWheels(-0.215,-0.15,"0xFEE88A"); //yellow(1/2's)
-			drawWagonWheels(0.25,0.3,"0xFEE88A"); //yellow(1/2's)
-			drawWagonWheels(-0.1,0.46,"0xFEE88A"); //yellow(1/2's)
-			drawWagonWheels(0.4,-0.1,"0xFEE88A"); //yellow(1/2's)
-			drawWagonWheels(-0.5,0.15,"0xFEE88A"); //yellow(1/2's)
-			drawWagonWheels(0.8,0.38,"0x8EB6F0"); // **blue(4's)
-			drawWagonWheels(-0.6,-0.6,"0XEB6363"); //red(6's)
-			drawWagonWheels(-0.68,0.8,"0x9EADC3");//blue(4's)
-			drawWagonWheels(-0.8,-0.18,"0x9EADC3");//blue(4's)
-			drawWagonWheels(0.7,0.7,"0XEB6363"); //red(6's)
-			drawWagonWheels(-0.85,0.85,"0XEB6363"); //red(6's)
-			drawWagonWheels(-0.48,0.48,"0x9EADC3");//blue(4's)
-			drawWagonWheels(0.4,-0.68,"0x9EADC3");//blue(4's)
+			wagonwheelButton.addEventListener('click', function() {
+				// Call drawWagonWheel() when the button is clicked
+				drawWagonWheel(0.2, 0.8, '0XEB6363');
+				drawWagonWheels(0.2,0.8,"0XEB6363"); //red(6's)
+				drawWagonWheels(-0.15,0.25,"0xFEE88A"); //yellow(1/2's)
+				drawWagonWheels(-0.215,-0.15,"0xFEE88A"); //yellow(1/2's)
+				drawWagonWheels(0.25,0.3,"0xFEE88A"); //yellow(1/2's)
+				drawWagonWheels(-0.1,0.46,"0xFEE88A"); //yellow(1/2's)
+				drawWagonWheels(0.4,-0.1,"0xFEE88A"); //yellow(1/2's)
+				drawWagonWheels(-0.5,0.15,"0xFEE88A"); //yellow(1/2's)
+				drawWagonWheels(0.8,0.38,"0x8EB6F0"); // **blue(4's)
+				drawWagonWheels(-0.6,-0.6,"0XEB6363"); //red(6's)
+				drawWagonWheels(-0.68,0.8,"0x9EADC3");//blue(4's)
+				drawWagonWheels(-0.8,-0.18,"0x9EADC3");//blue(4's)
+				drawWagonWheels(0.7,0.7,"0XEB6363"); //red(6's)
+				drawWagonWheels(-0.85,0.85,"0XEB6363"); //red(6's)
+				drawWagonWheels(-0.48,0.48,"0x9EADC3");//blue(4's)
+				drawWagonWheels(0.4,-0.68,"0x9EADC3");//blue(4's) 
+			  });
 			//boundingBox(model);
 			model_rendered=true;
 			//const tapToPlaceButton = document.getElementById('tap-to-place-button');
@@ -699,5 +703,50 @@ function render( timestamp, frame ) {
 	renderer.render( scene, camera );
 
 }
+
+function drawWagonWheels(xVal, yVal, color) {
+
+	var numPoints = 100;
+
+	var start = new THREE.Vector3(0, 0, 0);
+
+	let end = new THREE.Vector3(yVal, 0, -xVal);
+  
+	let points = [];
+	for (let i = 0; i <= 50; i++) {
+	  let p = new THREE.Vector3().lerpVectors(start, end, i / 50);
+	  if (color == "0XEB6363") {
+		p.y = p.y + 0.25 * Math.sin((Math.PI * i) / 50);
+	  } else {
+		p.y = p.y + 0.01 * Math.sin((Math.PI * i) / 50);
+	  }
+	  points.push(p);
+	}
+	let curve = new THREE.CatmullRomCurve3(points);
+	// var curveQuad = new THREE.QuadraticBezierCurve3(start, middle, end);
+  
+	var tube = new THREE.TubeGeometry(curve, numPoints, 0.005, 100, false);
+	var mesh = new THREE.Mesh(
+	  tube,
+	  new THREE.MeshPhongMaterial({
+		side: THREE.DoubleSide,
+	  })
+	);
+  
+	
+	mesh.scale.set(0.3, 0.3, 0.3);
+	mesh.position.set(0, 0, 0);
+	mesh.castShadow = true;// shadow
+	// mesh.position.set(-7, 5, -5);
+	// mesh.rotation.x = Math.PI / 7;
+	//mesh.name = "WagonWheels_" + name;
+	mesh.material.color.setHex(color);
+
+	const stadium = scene.getObjectByName("stadium");
+	stadium.add(mesh); //tubes are made children to stadium here.
+	//_runStore.push(mesh); //1,2,3,4,6 buttons, used in displaylines
+	stadium.receiveShadow = true; //shadow
+}
+
 init();
 animate();
