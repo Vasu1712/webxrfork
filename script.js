@@ -142,6 +142,7 @@ const fetchMatchData = () => {
 		  
 			// Populate the player list dynamically
 			playerData.forEach((player) => {
+				console.log("playerP", player);
 			  const playerElement = document.createElement("div");
 			  playerElement.classList.add("player");
 		  
@@ -183,7 +184,19 @@ const fetchMatchData = () => {
 				playerSelected= true;
 				playerSelectedName = player.playerName;
 
-				  init();
+				
+				
+					playerElement.addEventListener("click", function () {
+					
+				
+						// Dispatch a custom event indicating that a player is selected
+						const playerSelectedEvent = new CustomEvent('playerSelected', { detail: player });
+						window.dispatchEvent(playerSelectedEvent);
+					});
+				
+		
+		
+
 
 				// const playerImage = `<img src="${player.playerImage}" alt="Player Image">`;
 				// const playerName = `<p><span class="stat-label">Name:</span> <span class="stat-value">${player.playerName}</span></p>`;
@@ -221,6 +234,7 @@ const fetchMatchData = () => {
 	
 		  }
 		  
+
 
 
 
@@ -606,7 +620,28 @@ function init() {
 
 			//   });
 	
-				
+	
+			window.addEventListener('playerSelected', function (event) {
+        
+				console.log("Selected Player:", selectedPlayerData);
+			// Call drawWagonWheel() when the custom event is called
+						drawWagonWheels(0.2, 0.8, '0XEB6363');
+						drawWagonWheels(-0.15,0.25,"0xFEE88A"); //yellow(1/2's)
+						drawWagonWheels(-0.215,-0.15,"0xFEE88A"); //yellow(1/2's)
+						drawWagonWheels(0.25,0.3,"0xFEE88A"); //yellow(1/2's)
+						drawWagonWheels(-0.1,0.46,"0xFEE88A"); //yellow(1/2's)
+						drawWagonWheels(0.4,-0.1,"0xFEE88A"); //yellow(1/2's)
+						drawWagonWheels(-0.5,0.15,"0xFEE88A"); //yellow(1/2's)
+						drawWagonWheels(0.8,0.38,"0x8EB6F0"); // **blue(4's)
+						drawWagonWheels(-0.6,-0.6,"0XEB6363"); //red(6's)
+						drawWagonWheels(-0.68,0.8,"0x9EADC3");//blue(4's)
+						drawWagonWheels(-0.8,-0.18,"0x9EADC3");//blue(4's)
+						drawWagonWheels(0.7,0.7,"0XEB6363"); //red(6's)
+						drawWagonWheels(-0.85,0.85,"0XEB6363"); //red(6's)
+						drawWagonWheels(-0.48,0.48,"0x9EADC3");//blue(4's)
+						drawWagonWheels(0.4,-0.68,"0x9EADC3");//blue(4's) 
+		  
+			});
 				// drawWagonWheels(0.2, 0.8, '0XEB6363');
 				// drawWagonWheels(0.2,0.8,"0XEB6363"); //red(6's)
 				// drawWagonWheels(-0.15,0.25,"0xFEE88A"); //yellow(1/2's)
@@ -629,24 +664,6 @@ function init() {
 			// To hide the button
 			tapToPlaceButton.style.display = 'none';
 			// createButtons();
-
-			if (playerSelected) {
-				drawWagonWheels(0.2, 0.8, '0XEB6363');
-				drawWagonWheels(-0.15,0.25,"0xFEE88A"); //yellow(1/2's)
-				drawWagonWheels(-0.215,-0.15,"0xFEE88A"); //yellow(1/2's)
-				drawWagonWheels(0.25,0.3,"0xFEE88A"); //yellow(1/2's)
-				drawWagonWheels(-0.1,0.46,"0xFEE88A"); //yellow(1/2's)
-				drawWagonWheels(0.4,-0.1,"0xFEE88A"); //yellow(1/2's)
-				drawWagonWheels(-0.5,0.15,"0xFEE88A"); //yellow(1/2's)
-				drawWagonWheels(0.8,0.38,"0x8EB6F0"); // **blue(4's)
-				drawWagonWheels(-0.6,-0.6,"0XEB6363"); //red(6's)
-				drawWagonWheels(-0.68,0.8,"0x9EADC3");//blue(4's)
-				drawWagonWheels(-0.8,-0.18,"0x9EADC3");//blue(4's)
-				drawWagonWheels(0.7,0.7,"0XEB6363"); //red(6's)
-				drawWagonWheels(-0.85,0.85,"0XEB6363"); //red(6's)
-				drawWagonWheels(-0.48,0.48,"0x9EADC3");//blue(4's)
-				drawWagonWheels(0.4,-0.68,"0x9EADC3");//blue(4's)
-			}
 
 		}
 
