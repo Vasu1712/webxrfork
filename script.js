@@ -573,12 +573,12 @@ function init() {
 		
 			model.name="stadium";
 			scene.add(model);
-			// wagonwheelButton.addEventListener('click', function() {
-			// 	// Call drawWagonWheel() when the button is clicked
-			// 	drawWagonWheel(0.2, 0.8, '0XEB6363');
+			wagonwheelButton.addEventListener('click', function() {
+				// Call drawWagonWheel() when the button is clicked
+				drawWagonWheels(0.2, 0.8, '0XEB6363');
 
-			//   });
-				drawWagonWheel(0.2, 0.8, '0XEB6363');
+			  });
+				drawWagonWheels(0.2, 0.8, '0XEB6363');
 				drawWagonWheels(0.2,0.8,"0XEB6363"); //red(6's)
 				drawWagonWheels(-0.15,0.25,"0xFEE88A"); //yellow(1/2's)
 				drawWagonWheels(-0.215,-0.15,"0xFEE88A"); //yellow(1/2's)
