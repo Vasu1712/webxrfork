@@ -400,45 +400,47 @@ let model_rendered=false;
 
 /*--------------------------------Adding Wagon wheel------------------------------*/
 
-function drawWagonWheels(xVal, yVal, color, playerId) {
-  // Find the player data based on the playerId
- 	const playerData = playerId.startsWith('WI') ? playerDetail1 : playerDetail2;
-  	const player = playerData.find((player) => player.playerId === playerId);
+function drawWagonWheels(xVal, yVal, color) {
 
-      if (player) {
-    	const runs = player.runs;
+	var numPoints = 100;
 
-    	var numPoints = 100;
-    	var start = new THREE.Vector3(0, 0, 0);
-    	let end = new THREE.Vector3(yVal, 0, -xVal);
+	var start = new THREE.Vector3(0, 0, 0);
 
-    	let points = [];
-    	for (let i = 0; i <= 50; i++) {
-      	let p = new THREE.Vector3().lerpVectors(start, end, i / 50);
-      	   if (color == "0XEB6363") {
-        	p.y = p.y + 0.25 * Math.sin((Math.PI * i) / 50);
-       		} else {
-         	p.y = p.y + 0.01 * Math.sin((Math.PI * i) / 50);
-      	   }
-      	points.push(p);
-    	}
-
-  	let curve = new THREE.CatmullRomCurve3(points);
-    	var tube = new THREE.TubeGeometry(curve, numPoints, 0.005, 100, false);
-    	var mesh = new THREE.Mesh(
-      	tube,
-      	new THREE.MeshPhongMaterial({
-          side: THREE.DoubleSide,
-      	   })
-    	);
-
-    	mesh.scale.set(0.3, 0.3, 0.3);
-    	mesh.position.set(0, 0, 0);
-        mesh.castShadow = true;
+	let end = new THREE.Vector3(yVal, 0, -xVal);
+  
+	let points = [];
+	for (let i = 0; i <= 50; i++) {
+	  let p = new THREE.Vector3().lerpVectors(start, end, i / 50);
+	  if (color == "0XEB6363") {
+		p.y = p.y + 0.25 * Math.sin((Math.PI * i) / 50);
+	  } else {
+		p.y = p.y + 0.01 * Math.sin((Math.PI * i) / 50);
+	  }
+	  points.push(p);
+	}
+	let curve = new THREE.CatmullRomCurve3(points);
+	// var curveQuad = new THREE.QuadraticBezierCurve3(start, middle, end);
+  
+	var tube = new THREE.TubeGeometry(curve, numPoints, 0.005, 100, false);
+	var mesh = new THREE.Mesh(
+	  tube,
+	  new THREE.MeshPhongMaterial({
+		side: THREE.DoubleSide,
+	  })
+	);
+  
+	
+	mesh.scale.set(0.3, 0.3, 0.3);
+	mesh.position.set(0, 0, 0);
+	mesh.castShadow = true;// shadow
+	// mesh.position.set(-7, 5, -5);
+	// mesh.rotation.x = Math.PI / 7;
+	//mesh.name = "WagonWheels_" + name;
 	mesh.material.color.setHex(color);
 
-        const stadium = scene.getObjectByName("stadium");
-        stadium.add(mesh);
+	const stadium = scene.getObjectByName("stadium");
+	stadium.add(mesh); //tubes are made children to stadium here.
+	//_runStore.push(mesh); //1,2,3,4,6 buttons, used in displaylines
 	stadium.receiveShadow = true; //shadow
 }
 
