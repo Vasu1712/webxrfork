@@ -183,6 +183,8 @@ const fetchMatchData = () => {
 				playerSelected= true;
 				playerSelectedName = player.playerName;
 
+				  init();
+
 				// const playerImage = `<img src="${player.playerImage}" alt="Player Image">`;
 				// const playerName = `<p><span class="stat-label">Name:</span> <span class="stat-value">${player.playerName}</span></p>`;
 				// const balls = `<p><span class="stat-label">Balls:</span> <span class="stat-value">${player.balls}</span></p>`;
