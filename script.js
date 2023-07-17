@@ -592,6 +592,11 @@ function init() {
 				drawWagonWheels(0.4,-0.68,"0x9EADC3");//blue(4's) 
 
 			  });
+			       	  var currentPlayer = document.querySelectorAll('.player.selected');
+     				currentPlayer.addEventListener("click", (e) => {
+				console.log("playerclass11", e);
+				});
+				console.log("playerclass11", currentPlayer);
 				// drawWagonWheels(0.2, 0.8, '0XEB6363');
 				// drawWagonWheels(0.2,0.8,"0XEB6363"); //red(6's)
 				// drawWagonWheels(-0.15,0.25,"0xFEE88A"); //yellow(1/2's)
