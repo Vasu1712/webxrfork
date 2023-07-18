@@ -643,6 +643,7 @@ function init() {
 				if (runStore.length!=0) {
 					runStore.forEach(mesh => {
 						mesh.visible = false;
+						scene.remove(mesh);
 					  });
 				}
 				// console.log("Selected Player:", selectedPlayerData);
