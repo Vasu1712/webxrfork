@@ -26,8 +26,8 @@ const matchData = {
         threes: 0,
         fours: 0,
         sixes: 0,
-        drawWagonWheel1: 0.2,
-        drawWagonWheel2: 0.8
+        drawWagonWheel11: -0.2,
+        drawWagonWheel12: 0.15
       },
       {
         playerid: "d5b66b5d-34ad-4f9f-bd7c-b4134cd2fbc6",
@@ -41,8 +41,10 @@ const matchData = {
         threes: 0,
         fours: 2,
         sixes: 2,
-        drawWagonWheel1: -0.6,
-        drawWagonWheel2: 0.2
+        drawWagonWheel61: -0.6, //sixX
+        drawWagonWheel62: 0.2,  //sixY
+        drawWagonWheel61: -0.6, //sixX
+        drawWagonWheel62: 0.2  //sixY
       },
       {
         playerid: "381c69a2-1583-4489-8cb9-98099b8f3333",
