@@ -665,14 +665,14 @@ function init() {
 						drawWagonWheels(drawWagonWheel4x,drawWagonWheel4y,"0x9EADC3");//blue(4's)
 						drawWagonWheels(drawWagonWheel2x,drawWagonWheel2y,"0xFEE88A");//yellow(2/3's)) 
 						drawWagonWheels(drawWagonWheel1x,drawWagonWheel1y,"0xFFFFFF"); //White(1's)
-						if (runStore.length!=0) {
-							runStore.forEach(mesh => {
-								mesh.visible = false;
-								scene.remove(mesh);
-							  });
-						}
-						console.log("runstore",runStore);
-						runStore=[];
+						// if (runStore.length!=0) {
+						// 	runStore.forEach(mesh => {
+						// 		mesh.visible = false;
+						// 		scene.remove(mesh);
+						// 	  });
+						// }
+						// console.log("runstore",runStore);
+						// runStore=[];
 		  
 			});
 				// drawWagonWheels(0.2, 0.8, '0XEB6363');
