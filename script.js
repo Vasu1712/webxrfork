@@ -623,7 +623,7 @@ function init() {
 	
 			window.addEventListener('playerSelected', function (event) {
         
-				console.log("Selected Player:", selectedPlayerData);
+				// console.log("Selected Player:", selectedPlayerData);
 			// Call drawWagonWheel() when the custom event is called
 						drawWagonWheels(0.2, 0.8, '0XEB6363');
 						drawWagonWheels(-0.15,0.25,"0xFEE88A"); //yellow(1/2's)
