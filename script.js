@@ -635,7 +635,13 @@ function init() {
 			// 	drawWagonWheels(0.4,-0.68,"0x9EADC3");//blue(4's) 
 
 			//   });
-	
+			if (runStore.length!=0) {
+				runStore.forEach(mesh => {
+					mesh.visible = false;
+					scene.remove(mesh);
+				  });
+			}
+			console.log("runstore",runStore);
 	
 			
 			window.addEventListener('playerSelected', function (event) {
