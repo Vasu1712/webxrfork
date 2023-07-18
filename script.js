@@ -6,7 +6,7 @@ import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 import { FontLoader } from 'three/addons/loaders/FontLoader.js';
 import { playerDetail1, playerDetail2 } from "./data.js";
 
-let runStore = [];
+// let runStore = [];
 let container;
 let camera, scene, renderer;
 let controller;
@@ -481,7 +481,7 @@ function drawWagonWheels(xVal, yVal, color) {
 
 	const stadium = scene.getObjectByName("stadium");
 	stadium.add(mesh); //tubes are made children to stadium here.
-	runStore.push(mesh); //1,2,3,4,6 buttons, used in displaylines
+	// runStore.push(mesh); //1,2,3,4,6 buttons, used in displaylines
 	stadium.receiveShadow = true; //shadow
 }
 
@@ -640,11 +640,11 @@ function init() {
 			
 			window.addEventListener('playerSelected', function (event) {
         
-				if (runStore.length!=0) {
-					runStore.forEach(mesh => {
-						mesh.visible = false;
-					  });
-				}
+				// if (runStore.length!=0) {
+				// 	runStore.forEach(mesh => {
+				// 		mesh.visible = false;
+				// 	  });
+				// }
 				// console.log("Selected Player:", selectedPlayerData);
 			// Call drawWagonWheel() when the custom event is called
 						// drawWagonWheels(0.2, 0.8, '0XEB6363');
@@ -663,8 +663,8 @@ function init() {
 						drawWagonWheels(drawWagonWheel4x,drawWagonWheel4y,"0x9EADC3");//blue(4's)
 						drawWagonWheels(drawWagonWheel2x,drawWagonWheel2y,"0xFEE88A");//yellow(2/3's)) 
 						drawWagonWheels(drawWagonWheel1x,drawWagonWheel1y,"0xFFFFFF"); //White(1's)
-						console.log("runstore",runStore);
-						runStore=[];
+						// console.log("runstore",runStore);
+						// runStore=[];
 		  
 			});
 				// drawWagonWheels(0.2, 0.8, '0XEB6363');
