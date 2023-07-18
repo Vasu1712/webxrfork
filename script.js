@@ -537,11 +537,6 @@ function getPosition(model,reticle)
 
 
 console.log(playerSelected, playerSelectedName);
-drawWagonWheels(drawWagonWheel6x,drawWagonWheel6y,"0XEB6363"); //red(6's)
-						drawWagonWheels(drawWagonWheel4x,drawWagonWheel4y,"0x9EADC3");//blue(4's)
-						drawWagonWheels(drawWagonWheel2x,drawWagonWheel2y,"0xFEE88A");//yellow(2/3's)) 
-						drawWagonWheels(drawWagonWheel1x,drawWagonWheel1y,"0xFFFFFF"); //White(1's)
-console.log("runstore",runStore);
 /*---------------------------------INIT FUNCTION-------------------------------*/
 
 
