@@ -17,6 +17,8 @@ let hitTestSourceRequested = false;
 let currCountry;
 var playerSelected= false;
 var playerSelectedName="";
+var drawWagonWheelx;
+var drawWagonWheely;
 /*-----------------Loading Model-----------------------------------------*/	
 const loadGLTF = (path) => {
 	return new Promise((resolve, reject) => {
@@ -183,6 +185,8 @@ const fetchMatchData = () => {
 
 				playerSelected= true;
 				playerSelectedName = player.playerName;
+				drawWagonWheelx = player.drawWagonWheel1;
+				drawWagonWheely = player.drawWagonWheel2;
 
 				
 				
@@ -625,19 +629,19 @@ function init() {
         
 				// console.log("Selected Player:", selectedPlayerData);
 			// Call drawWagonWheel() when the custom event is called
-						drawWagonWheels(0.2, 0.8, '0XEB6363');
-						drawWagonWheels(-0.15,0.25,"0xFEE88A"); //yellow(1/2's)
-						drawWagonWheels(-0.215,-0.15,"0xFEE88A"); //yellow(1/2's)
-						drawWagonWheels(0.25,0.3,"0xFEE88A"); //yellow(1/2's)
-						drawWagonWheels(-0.1,0.46,"0xFEE88A"); //yellow(1/2's)
-						drawWagonWheels(0.4,-0.1,"0xFEE88A"); //yellow(1/2's)
-						drawWagonWheels(-0.5,0.15,"0xFEE88A"); //yellow(1/2's)
-						drawWagonWheels(0.8,0.38,"0x8EB6F0"); // **blue(4's)
-						drawWagonWheels(-0.6,-0.6,"0XEB6363"); //red(6's)
-						drawWagonWheels(-0.68,0.8,"0x9EADC3");//blue(4's)
-						drawWagonWheels(-0.8,-0.18,"0x9EADC3");//blue(4's)
-						drawWagonWheels(0.7,0.7,"0XEB6363"); //red(6's)
-						drawWagonWheels(-0.85,0.85,"0XEB6363"); //red(6's)
+						// drawWagonWheels(0.2, 0.8, '0XEB6363');
+						// drawWagonWheels(-0.15,0.25,"0xFEE88A"); //yellow(1/2's)
+						// drawWagonWheels(-0.215,-0.15,"0xFEE88A"); //yellow(1/2's)
+						// drawWagonWheels(0.25,0.3,"0xFEE88A"); //yellow(1/2's)
+						// drawWagonWheels(-0.1,0.46,"0xFEE88A"); //yellow(1/2's)
+						// drawWagonWheels(0.4,-0.1,"0xFEE88A"); //yellow(1/2's)
+						// drawWagonWheels(-0.5,0.15,"0xFEE88A"); //yellow(1/2's)
+						// drawWagonWheels(0.8,0.38,"0x8EB6F0"); // **blue(4's)
+						// drawWagonWheels(-0.6,-0.6,"0XEB6363"); //red(6's)
+						// drawWagonWheels(-0.68,0.8,"0x9EADC3");//blue(4's)
+						// drawWagonWheels(-0.8,-0.18,"0x9EADC3");//blue(4's)
+						// drawWagonWheels(0.7,0.7,"0XEB6363"); //red(6's)
+						drawWagonWheels(drawWagonWheelx,drawWagonWheely,"0XEB6363"); //red(6's)
 						drawWagonWheels(-0.48,0.48,"0x9EADC3");//blue(4's)
 						drawWagonWheels(0.4,-0.68,"0x9EADC3");//blue(4's) 
 		  
@@ -699,7 +703,7 @@ function animate() {
 	renderer.setAnimationLoop( render );
 	requestAnimationFrame(animate);
 	controls.update();
-	console.log(playerSelected, playerSelectedName);
+	// console.log(playerSelected, playerSelectedName);
 
 }
 
